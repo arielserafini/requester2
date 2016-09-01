@@ -4,7 +4,7 @@ import App from './App';
 import './index.css';
 
 ReactDOM.render(
-  <App name="a" text="this is some text" />,
+  <App name="requester" text="something else entirely" />,
   document.getElementById('root')
 );
 

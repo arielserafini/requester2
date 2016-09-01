@@ -8,7 +8,8 @@ class App extends Component {
   }
 
   state = {
-    count: this.props.count
+    count: this.props.count,
+    text: this.props.text
   }
 
   static propTypes = {
@@ -21,16 +22,23 @@ class App extends Component {
     })
   }
 
+  updateText(e) {
+    this.setState({
+      text: e.target.value
+    });
+  }
+
   render() {
     return (
       <div className="App">
         <div className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h2>{this.props.name} aa</h2>
+          <h2>{this.props.name}</h2>
         </div>
-        <p className="App-intro">{this.props.text}</p>
+        <p className="App-intro">{this.state.text}</p>
         <div> {this.state.count} </div>
         <button onClick={this.increment.bind(this)}>Count++</button>
+        <div> <input value={this.state.text} onChange={this.updateText.bind(this)}/> </div>
       </div>
     );
   }
