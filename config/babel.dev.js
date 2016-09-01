@@ -25,6 +25,7 @@ module.exports = {
       helpers: false,
       polyfill: false,
       regenerator: true
-    }]
+    }],
+    require.resolve('react-hot-loader/babel')
   ]
 };
