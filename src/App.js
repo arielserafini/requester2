@@ -2,43 +2,65 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+class RequestList extends Component {
+    render() {
+        let addRequestField = (item) => {
+            return (
+                <RequestField key={item.id} uri={item.uri}/>
+            );
+        }
+        return (
+            <div>
+                {this.props.requests.map(addRequestField)}
+            </div>
+        );
+    }
+}
+
+class RequestField extends Component {
+
+    state = {
+        uri: this.props.uri
+    }
+
+    updateRequestURI(e){
+        this.setState({
+            uri: e.target.value
+        });
+    }
+
+    render() {
+        return (
+            <div><input value={this.state.uri} onChange={this.updateRequestURI.bind(this)} />{this.state.uri}</div>
+        );
+    }
+}
+
 class App extends Component {
-  static defaultProps = {
-    count: 100
-  }
-
   state = {
-    count: this.props.count,
-    text: this.props.text
+    APP_NAME: 'requester',
+    requests: []
   }
 
-  static propTypes = {
-    count: React.PropTypes.number.isRequired
-  }
+  addRequest() {
+    let requests = this.state.requests.concat([{uri: '', id: Date.now()}]);
 
-  increment() {
     this.setState({
-      count: this.state.count + 1
-    })
-  }
-
-  updateText(e) {
-    this.setState({
-      text: e.target.value
+        requests: requests
     });
   }
+
 
   render() {
     return (
       <div className="App">
         <div className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h2>{this.props.name}</h2>
+          <h2>{this.state.APP_NAME}</h2>
+          <button onClick={this.addRequest.bind(this)}>Add request</button>
+          <RequestList requests={this.state.requests} />
         </div>
-        <p className="App-intro">{this.state.text}</p>
-        <div> {this.state.count} </div>
-        <button onClick={this.increment.bind(this)}>Count++</button>
-        <div> <input value={this.state.text} onChange={this.updateText.bind(this)}/> </div>
+
       </div>
     );
   }
