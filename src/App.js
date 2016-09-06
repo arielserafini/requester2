@@ -6,8 +6,8 @@ class RequestList extends Component {
   render() {
     let addRequestField = (item) => {
       return (
-        <li>
-          <RequestPreset key={item.id} uri={item.uri} method={item.method} name={item.name} onClick={setActivePreset(item)}/>
+        <li key={item.id}>
+          <RequestPreset uri={item.uri} method={item.method} name={item.name} clickHandler={() => this.props.clickHandler(item)}/>
         </li>
       );
     }
@@ -22,7 +22,7 @@ class RequestList extends Component {
 class RequestPreset extends Component {
   render() {
     return (
-      <a>{this.props.name}</a>
+      <button onClick={this.props.clickHandler}>{this.props.name}</button>
     );
   }
 };
@@ -52,8 +52,22 @@ class URIField extends Component {
         <select>
           {this.props.methods.map(addMethodOption)}
         </select>
-        <input value={this.state.uri} onChange={this.updateRequestURI.bind(this)} />{this.state.uri}
+        <input value={this.state.uri} onChange={() => this.updateRequestURI()} />{this.state.uri}
       </div>
+    );
+  }
+}
+
+class PresetName extends Component {
+  updateRequestName(e) {
+    this.setState({
+
+    });
+  }
+
+  render() {
+    return (
+      <div>Preset name: <input value={this.props.preset.name} onChange={this.updateRequestName}/></div>
     );
   }
 }
@@ -65,6 +79,7 @@ class App extends Component {
       'GET', 'POST'
     ],
     requests: [],
+    activePreset: undefined
   }
 
   addRequest() {
@@ -80,11 +95,17 @@ class App extends Component {
   }
 
   setActivePreset(preset) {
-    console.log(preset);
+    this.setState({
+      activePreset: preset
+    });
   }
 
-
   render() {
+    let presetName = <div>No active preset.</div>;
+    if (this.state.activePreset) {
+      presetName = <PresetName preset={this.state.activePreset}/>;
+    }
+
     return (
       <div className="App">
         <div className="App-header">
@@ -92,8 +113,10 @@ class App extends Component {
           <h2>{this.state.APP_NAME}</h2>
         </div>
         <URIField methods={this.state.HTTP_METHODS} />
-        <button onClick={this.addRequest.bind(this)}>Add request</button>
-        <RequestList requests={this.state.requests} />
+        <button onClick={() => this.addRequest()}>Add request</button>
+        <br />
+        {presetName}
+        <RequestList requests={this.state.requests} clickHandler={(preset) => this.setActivePreset(preset)} />
       </div>
     );
   }
