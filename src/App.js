@@ -59,15 +59,22 @@ class URIField extends Component {
 }
 
 class PresetName extends Component {
-  updateRequestName(e) {
-    this.setState({
+  state = {
+    preset: this.props.preset
+  }
 
+
+  updateRequestName(e) {
+    let preset = this.state.preset;
+    preset.name = e.target.value;
+    this.setState({
+      preset: preset
     });
   }
 
   render() {
     return (
-      <div>Preset name: <input value={this.props.preset.name} onChange={this.updateRequestName}/></div>
+      <div>Preset name: <input value={this.state.preset.name} onChange={(e)=>{this.updateRequestName(e)}}/></div>
     );
   }
 }
@@ -100,10 +107,14 @@ class App extends Component {
     });
   }
 
+  updateRequest(e) {
+    console.log(e);
+  }
+
   render() {
     let presetName = <div>No active preset.</div>;
     if (this.state.activePreset) {
-      presetName = <PresetName preset={this.state.activePreset}/>;
+      presetName = <PresetName preset={this.state.activePreset} onChange={(e)=>this.updateRequest(e)}/>;
     }
 
     return (
